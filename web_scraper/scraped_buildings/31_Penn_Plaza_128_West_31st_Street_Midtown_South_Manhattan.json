@@ -1,0 +1,20 @@
+{
+  "url": "https://nyc.marketproof.com/building/manhattan/midtown/132-w-31st-street-10001?tab=details",
+  "scraped_at": "2025-10-04T08:34:15.320924",
+  "building_info": {
+    "address": "31 Penn Plaza\n128 West 31st Street, Midtown South, Manhattan",
+    "zip_code": "10001",
+    "borough": "Manhattan",
+    "building_type": "Commercial",
+    "floors": "17",
+    "number_of_units": "47",
+    "year_built": "1925"
+  },
+  "violations": {
+    "dob_violations": "117",
+    "ecb_violations": "42",
+    "hpd_violations": "0",
+    "dob_complaints": "57"
+  },
+  "building_footprint_url": "scraped_buildings\\footprint_20251004_083430.png"
+}

@@ -19,6 +19,7 @@ from datetime import datetime
 from PIL import Image
 
 
+
 class NYCBuildingScraper:
     def __init__(self, headless=False):
         """Initialize the scraper with Chrome webdriver"""
@@ -36,15 +37,12 @@ class NYCBuildingScraper:
         self.driver = webdriver.Chrome(service=service, options=chrome_options)
         self.wait = WebDriverWait(self.driver, 15)
 
-    def scrape_building(self, url, formatted_street=None, neighborhood=None, borough=None):
+    def scrape_building(self, url):
         """
         Scrape building data from a MarketProof URL
 
         Args:
             url: Full URL to the building page
-            formatted_street: Pre-formatted street address for filenames
-            neighborhood: Neighborhood name for filenames
-            borough: Borough name for filenames
 
         Returns:
             dict: Building data including overview, violations, and footprint
@@ -59,12 +57,9 @@ class NYCBuildingScraper:
         building_data = {
             'url': url,
             'scraped_at': datetime.now().isoformat(),
-            'building_info': {'address': url_address},
+            'building_info': {'address': url_address},  # Pre-populate with URL address
             'violations': {},
-            'building_footprint_url': None,
-            'formatted_street': formatted_street,
-            'neighborhood': neighborhood,
-            'borough': borough
+            'building_footprint_url': None
         }
 
         # Navigate to overview tab first
@@ -81,11 +76,7 @@ class NYCBuildingScraper:
             building_data['building_info']['address'] = url_address
 
         # Get building footprint photo from overview tab
-        building_data['building_footprint_url'] = self._get_footprint_image(
-            formatted_street=formatted_street,
-            neighborhood=neighborhood,
-            borough=borough
-        )
+        building_data['building_footprint_url'] = self._get_footprint_image()
 
         # Scrape violations by navigating to violations URL
         building_data['violations'] = self._scrape_violations(url)
@@ -281,7 +272,7 @@ class NYCBuildingScraper:
 
         return overview_data
 
-    def _get_footprint_image(self, output_dir='scraped_buildings', formatted_street=None, neighborhood=None, borough=None):
+    def _get_footprint_image(self, output_dir='scraped_buildings'):
         """Screenshot the Mapbox canvas building footprint and crop out button"""
         print("\nExtracting building footprint image...")
 
@@ -296,15 +287,10 @@ class NYCBuildingScraper:
                 print("✓ Found Mapbox canvas element")
                 os.makedirs(output_dir, exist_ok=True)
 
-                # Generate filename based on address components if available
-                if formatted_street and neighborhood and borough:
-                    base_filename = f'footprint_{formatted_street}_{neighborhood}_{borough}'
-                else:
-                    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-                    base_filename = f'footprint_{timestamp}'
-
-                temp_path = os.path.join(output_dir, f'{base_filename}_temp.png')
-                screenshot_path = os.path.join(output_dir, f'{base_filename}.png')
+                # Generate filename
+                timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+                temp_path = os.path.join(output_dir, f'footprint_temp_{timestamp}.png')
+                screenshot_path = os.path.join(output_dir, f'footprint_{timestamp}.png')
 
                 # Take screenshot
                 canvas.screenshot(temp_path)
@@ -456,28 +442,19 @@ class NYCBuildingScraper:
     def close(self):
         """Close the browser"""
         self.driver.quit()
-    def address_to_url(self, full_address):
+    def address_to_url(self, address, zip_code=None):
         """
-        Convert full NYC address to MarketProof URL format
+        Convert NYC address to MarketProof URL format
 
         Args:
-            full_address: Full address string (e.g., "132 W 31st St, New York, NY 10001")
+            address: Street address (e.g., "110 West 57 Street")
+            zip_code: Optional ZIP code (e.g., "10019")
 
         Returns:
-            tuple: (url, formatted_street, neighborhood, borough, zip_code)
+            str: MarketProof URL
         """
-        # Extract ZIP code from the end
-        zip_match = re.search(r'(\d{5}(?:-\d{4})?)\s*$', full_address)
-        zip_code = zip_match.group(1) if zip_match else None
-
-        # Remove ZIP code from address
-        street_address = re.sub(r',?\s*\d{5}(?:-\d{4})?\s*$', '', full_address)
-
-        # Remove city and state
-        street_address = re.sub(r',\s*(?:New York|NYC|Manhattan|Brooklyn|Queens|Bronx|Staten Island),?\s*(?:NY|New York)?\s*$', '', street_address, flags=re.IGNORECASE)
-
-        # Clean and format street address
-        street_clean = street_address.lower().strip()
+        # Clean and format address
+        address_clean = address.lower().strip()
 
         # Replace common abbreviations
         replacements = {
@@ -497,28 +474,28 @@ class NYCBuildingScraper:
             'west ': 'west-',
             'north ': 'north-',
             'south ': 'south-',
-            ' e ': '-east-',
-            ' w ': '-west-',
-            ' n ': '-north-',
-            ' s ': '-south-',
         }
 
-        formatted_street = street_clean
         for old, new in replacements.items():
-            formatted_street = formatted_street.replace(old, new)
+            address_clean = address_clean.replace(old, new)
 
-        formatted_street = formatted_street.replace(' ', '-')
-        formatted_street = re.sub(r'[^\w\-]', '', formatted_street)
+        # Replace spaces with hyphens
+        address_clean = address_clean.replace(' ', '-')
 
+        # Remove special characters except hyphens
+        address_clean = re.sub(r'[^\w\-]', '', address_clean)
+
+        # Default borough to manhattan if not specified
         borough = 'manhattan'
         neighborhood = 'midtown'
 
+        # Construct URL
         if zip_code:
-            url = f"https://nyc.marketproof.com/building/{borough}/{neighborhood}/{formatted_street}-{zip_code}?tab=details"
+            url = f"https://nyc.marketproof.com/building/{borough}/{neighborhood}/{address_clean}-{zip_code}?tab=details"
         else:
-            url = f"https://nyc.marketproof.com/building/{borough}/{neighborhood}/{formatted_street}?tab=details"
+            url = f"https://nyc.marketproof.com/building/{borough}/{neighborhood}/{address_clean}?tab=details"
 
-        return url, formatted_street, neighborhood, borough, zip_code
+        return url
 
     def scrape_by_address(self, address, zip_code=None):
         """
@@ -545,9 +522,17 @@ def main():
     # scraper = NYCBuildingScraper(headless=False)
     # building_data = scraper.scrape_building(url)
 
-    # Option 2: Use address
-    address = "110 West 57 Street"
-    zip_code = "10019"
+    import sys
+    # Get address and zip code from command-line arguments if provided
+    if len(sys.argv) >= 3:
+        address = sys.argv[1]
+        zip_code = sys.argv[2]
+    elif len(sys.argv) == 2:
+        address = sys.argv[1]
+        zip_code = None
+    else:
+        address = "110 West 57 Street"
+        zip_code = "10019"
 
     scraper = NYCBuildingScraper(headless=False)  # Set to True for headless mode
 
