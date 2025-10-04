@@ -290,7 +290,7 @@ class NYCBuildingScraper:
                 # Generate filename
                 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
                 temp_path = os.path.join(output_dir, f'footprint_temp_{timestamp}.png')
-                screenshot_path = os.path.join(output_dir, f'footprint_{timestamp}.png')
+                screenshot_path = os.path.join(output_dir, f'footprint_{self.address}_{timestamp}.png')
 
                 # Take screenshot
                 canvas.screenshot(temp_path)
@@ -485,6 +485,7 @@ class NYCBuildingScraper:
         # Remove special characters except hyphens
         address_clean = re.sub(r'[^\w\-]', '', address_clean)
 
+        self.address = address_clean
         # Default borough to manhattan if not specified
         borough = 'manhattan'
         neighborhood = 'midtown'
