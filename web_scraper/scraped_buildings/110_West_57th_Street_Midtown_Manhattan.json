@@ -1,6 +1,6 @@
 {
   "url": "https://nyc.marketproof.com/building/manhattan/midtown/110-west-57-street-10019?tab=details",
-  "scraped_at": "2025-10-04T07:26:24.348951",
+  "scraped_at": "2025-10-04T07:46:51.522848",
   "building_info": {
     "address": "110 West 57th Street\nMidtown, Manhattan",
     "zip_code": "10019",
@@ -16,5 +16,5 @@
     "hpd_violations": "0",
     "dob_complaints": "9"
   },
-  "building_footprint_url": "scraped_buildings\\footprint_20251004_072639.png"
+  "building_footprint_url": "scraped_buildings\\footprint_20251004_074706.png"
 }
