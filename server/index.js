@@ -1,4 +1,5 @@
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({ path: path.resolve(__dirname, '.env') });
 const express = require('express');
 const cors = require('cors');
 const apiRouter = require('./routes/scan');
@@ -20,7 +21,7 @@ app.get('/favicon.ico', (req, res) => {
   res.send(svg);
 });
 
-app.use('/api', apiRouter);;
+app.use('/api', apiRouter);
 
 app.use('/exif', exifRouter);
 

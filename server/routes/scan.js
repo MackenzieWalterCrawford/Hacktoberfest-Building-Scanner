@@ -4,10 +4,10 @@ const _formidable = require('formidable');
 // Handle CommonJS vs ESM export shapes: some versions export a function directly, others export as default
 const formidable = (typeof _formidable === 'function') ? _formidable : (_formidable.default || _formidable.formidable || _formidable);
 const ExifParser = require('exif-parser');
-const OpenAI = require('openai');
+const Anthropic = require('@anthropic-ai/sdk');
 
 const router = express.Router();
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
 function dmsToDecimal(dms, ref) {
   if (dms == null) return null;
@@ -102,23 +102,23 @@ router.post('/scan', (req, res) => {
       const prompt = `I have coordinates: ${latitude}, ${longitude}. Return a JSON object with keys: name, address, known_use (e.g., residential, office, landmark), year_built (if known), description (short), and data_source. If unknown, use null. Respond ONLY with JSON.`;
 
       // Choose model (env override or sensible default)
-      const model = process.env.OPENAI_MODEL || 'gpt-4o-mini';
+      const model = process.env.ANTHROPIC_MODEL || 'claude-3-7-sonnet-20250219';
 
       try {
-        const response = await openai.chat.completions.create({
+        const response = await anthropic.messages.create({
           model,
-          messages: [{ role: 'user', content: prompt }],
           max_tokens: 400,
+          messages: [{ role: 'user', content: prompt }],
         });
 
-        const text = response.choices?.[0]?.message?.content || '';
+        const text = response.content?.[0]?.text || '';
         let parsed;
         try { parsed = JSON.parse(text); } catch (e) { parsed = { raw: text }; }
 
         return res.json({ latitude, longitude, building: parsed });
       } catch (e) {
-        console.error('OpenAI error', e?.response?.data || e.message || e);
-        return res.status(500).json({ error: 'Failed to fetch building info from OpenAI' });
+        console.error('Anthropic error', e?.response?.data || e.message || e);
+        return res.status(500).json({ error: 'Failed to fetch building info from Claude' });
       }
     } catch (e) {
       console.error('EXIF parse error', e);

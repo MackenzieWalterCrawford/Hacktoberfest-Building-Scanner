@@ -16,10 +16,10 @@ function handleRefresh() {
     // code to run when the page was refreshed
     console.log('page refreshed');
     console.log('component mounted');
-    photo_file = form.parse.files
-    const res = fetch('http://localhost:4000/exif/exif_parsed', { method: 'POST', body: photo_file })
-    console.log('res', res)
-    console.log('phto_file', photo_file)
+    const res = fetch('http://localhost:4000/exif/exif_parsed', { method: 'POST', body: file })
+    console.log('testing refresh', 'refresh message')
+    // console.log('res', res)
+    // console.log('phto_file', photo_file)
     // form.parse(req, (err, files) => {
     // console.log('form.parse err:', err);
     // console.log('form.parse files:', JSON.stringify(files, null, 2));
@@ -30,12 +30,8 @@ function handleRefresh() {
  
 
   useEffect(() => {
-    // navType === 'reload' (or performance.navigation.TYPE_RELOAD) indicates a refresh
-    if (navType === 'reload' || navType === 1) {
-      handleRefresh();
-    //   extractExif(f);
-    } 
-
+        console.log('testing refresh', 'refresh message')
+        handleRefresh();
     }); 
 
   function onFileChange(e) {
