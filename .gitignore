@@ -1,3 +1,15 @@
 *.png
 *.json
 *.html
+node_modules/
+.env
+server/node_modules/
+client/node_modules/
+.DS_Store
+dist/
+build/
+/.venv
+/.pytest_cache
+*.png
+*.json
+*.html
