@@ -8,7 +8,6 @@ const OpenAI = require('openai');
 
 const router = express.Router();
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-console.log('OpenAI API Key:', process.env.OPENAI_API_KEY );
 
 function dmsToDecimal(dms, ref) {
   if (dms == null) return null;
