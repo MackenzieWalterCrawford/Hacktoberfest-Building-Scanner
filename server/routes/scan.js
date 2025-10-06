@@ -99,12 +99,28 @@ router.post('/scan', (req, res) => {
       const longitude = dmsToDecimal(lon, lonRef);
 
       // Build prompt
-      const prompt = `I have coordinates: ${latitude}, ${longitude}. Return a JSON object with keys: name, address, known_use (e.g., residential, office, landmark), year_built (if known), description (short), and data_source. If unknown, use null. Respond ONLY with JSON.`;
+      const prompt = 
+        `You are a building information assistant. You will receive an image of a building along with approximate GPS coordinates. The coordinates may be 1-2 blocks away from the actual building, so carefully analyze the image to identify the correct building.
+        Given the GPS coordinates: Latitude ${latitude}, Longitude ${longitude}, identify the building in the image and provide the following information in JSON format.
+        Respond ONLY with valid JSON in this exact structure:
+
+        {
+        "address": "full street address",
+        "year_built": "year or Unknown",
+        "architect": "name or Unknown",
+        "floors": "number or Unknown",
+        "height": "measurement with units or Unknown",
+        "type": "residential/commercial/industrial/mixed-use/institutional/other",
+        "fun_facts": ["fact 1", "fact 2", "fact 3"] or []
+        }
+
+        Do not include any text outside the JSON object.`;
 
       // Choose model (env override or sensible default)
       const model = process.env.ANTHROPIC_MODEL || 'claude-3-7-sonnet-20250219';
 
       try {
+
         const response = await anthropic.messages.create({
           model,
           max_tokens: 400,
