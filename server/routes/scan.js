@@ -5,6 +5,7 @@ const _formidable = require('formidable');
 const formidable = (typeof _formidable === 'function') ? _formidable : (_formidable.default || _formidable.formidable || _formidable);
 const ExifParser = require('exif-parser');
 const Anthropic = require('@anthropic-ai/sdk');
+const sharp = require('sharp');
 
 const router = express.Router();
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
@@ -98,8 +99,8 @@ router.post('/scan', (req, res) => {
       const latitude = dmsToDecimal(lat, latRef);
       const longitude = dmsToDecimal(lon, lonRef);
 
-      // Build prompt
-      const prompt = 
+      // Build prompt with image
+      const promptText =
         `You are a building information assistant. You will receive an image of a building along with approximate GPS coordinates. The coordinates may be 1-2 blocks away from the actual building, so carefully analyze the image to identify the correct building.
         Given the GPS coordinates: Latitude ${latitude}, Longitude ${longitude}, identify the building in the image and provide the following information in JSON format.
         Respond ONLY with valid JSON in this exact structure:
@@ -116,6 +117,22 @@ router.post('/scan', (req, res) => {
 
         Do not include any text outside the JSON object.`;
 
+      // Compress image to reduce API costs and stay within limits
+      // Claude supports up to 5MB per image, but smaller is faster and cheaper
+      const compressedBuffer = await sharp(buffer)
+        .resize(1568, 1568, { // Max dimension Claude recommends for detail
+          fit: 'inside',
+          withoutEnlargement: true
+        })
+        .jpeg({ quality: 85 }) // Convert to JPEG with good quality
+        .toBuffer();
+
+      // Convert compressed image to base64
+      const base64Image = compressedBuffer.toString('base64');
+
+      // Use JPEG as media type since we're converting to JPEG
+      const mimeType = 'image/jpeg';
+
       // Choose model (env override or sensible default)
       const model = process.env.ANTHROPIC_MODEL || 'claude-3-7-sonnet-20250219';
 
@@ -124,7 +141,23 @@ router.post('/scan', (req, res) => {
         const response = await anthropic.messages.create({
           model,
           max_tokens: 400,
-          messages: [{ role: 'user', content: prompt }],
+          messages: [{
+            role: 'user',
+            content: [
+              {
+                type: 'image',
+                source: {
+                  type: 'base64',
+                  media_type: mimeType,
+                  data: base64Image,
+                }
+              },
+              {
+                type: 'text',
+                text: promptText
+              }
+            ]
+          }],
         });
 
         const text = response.content?.[0]?.text || '';
