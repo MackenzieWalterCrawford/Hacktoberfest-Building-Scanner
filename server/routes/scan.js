@@ -164,7 +164,7 @@ router.post('/scan', (req, res) => {
         let parsed;
         try { parsed = JSON.parse(text); } catch (e) { parsed = { raw: text }; }
 
-        return res.json({ latitude, longitude, building: parsed });
+        return res.json( parsed );
       } catch (e) {
         console.error('Anthropic error', e?.response?.data || e.message || e);
         return res.status(500).json({ error: 'Failed to fetch building info from Claude' });
