@@ -25,10 +25,12 @@ body {
 }
 
 .header {
+  border: #365073 3px solid;
   background:  #D9D3B4 100%;
   color: #365073;
   padding: 3rem 2rem;
   text-align: center;
+  border-radius: 15px; 
 }
 
 .title {
