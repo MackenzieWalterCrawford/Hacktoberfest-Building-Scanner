@@ -61,7 +61,7 @@ body {
   display: block;
   padding: 1.25rem 2rem;
   background: #4EA68D;
-  border: 2px dashed #365073;
+  border: none;
   border-radius: 12px;
   text-align: center;
   font-size: 1rem;
@@ -72,7 +72,6 @@ body {
 }
 
 .file-input-label:hover .file-input-text {
-  border-color: #F2C744;
   background: #4EA68D;
   color: #F2C744;
 }
@@ -107,9 +106,8 @@ body {
 }
 
 .scan-button:hover  {
-  border-color: #F2C744;
   background: #4EA68D;
-  color: #F2C744
+  color: #F2C744;
 }
 
 .scan-button:disabled {
@@ -128,7 +126,7 @@ body {
   width: 18px;
   height: 18px;
   border: 3px solid rgba(255, 255, 255, 0.3);
-  border-top-color: white;
+  border-top-color: #F2C744;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
@@ -162,6 +160,7 @@ body {
   color: #365073;
   margin-bottom: 1.5rem;
   text-align: center;
+  letter-spacing: 3px;
 }
 
 .info-grid {
@@ -203,14 +202,9 @@ body {
 }
 
 .type-badge {
-  display: inline-block;
-  padding: 0.25rem 0.75rem;
-  background:#4ECBD9 100%;
-  color: white;
-  border-radius: 20px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  text-transform: capitalize;
+  font-size: 1.1rem;
+  color: #2d3748;
+  font-weight: 500;
 }
 
 .fun-facts {
@@ -223,8 +217,9 @@ body {
 .fun-facts-title {
   font-size: 1.25rem;
   font-weight: 700;
-  color: #2d3748;
+  color: #365073;
   margin-bottom: 1rem;
+  letter-spacing: 3px;
 }
 
 .fun-facts-list {
@@ -234,7 +229,7 @@ body {
 .fun-fact-item {
   padding: 0.75rem 0;
   border-bottom: 1px solid #e2e8f0;
-  color: #4a5568;
+  color: #3F768C;
   line-height: 1.6;
   position: relative;
   padding-left: 1.5rem;
@@ -248,7 +243,7 @@ body {
   content: "•";
   position: absolute;
   left: 0;
-  color: #BF2C1F;
+  color: #365073;
   font-size: 1.5rem;
   line-height: 1.2;
 }
