@@ -42,10 +42,10 @@ export default function App() {
 
   return (
     <div className="app">
-      <div className="container">
+      {/* <div className="container"> */}
         <header className="header">
-          <h1 className="title">Building Scanner</h1>
-          <p className="subtitle">Upload a photo to discover building information</p>
+          <h1 className="title" style={{ fontFamily: 'inter, sans-serif' }}>Building Scanner</h1>
+          <p className="subtitle" style={{ fontFamily: 'inter, sans-serif' }}>Upload a photo to discover building information</p>
         </header>
 
         <form onSubmit={onSubmit} className="upload-form">
@@ -142,7 +142,7 @@ export default function App() {
             )}
           </div>
         )}
-      </div>
+      {/* </div> */}
     </div>
   )
 }

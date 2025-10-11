@@ -6,7 +6,7 @@
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
-  background:  #D9BBA0 100%;
+  background:  #D9D3B4 100%;
   min-height: 100vh;
   padding: 2rem 1rem;
   color: #333;
@@ -25,8 +25,8 @@ body {
 }
 
 .header {
-  background:  #8C0404 100%;
-  color: white;
+  background:  #D9D3B4 100%;
+  color: #365073;
   padding: 3rem 2rem;
   text-align: center;
 }
@@ -60,20 +60,21 @@ body {
 .file-input-text {
   display: block;
   padding: 1.25rem 2rem;
-  background: #4ECBD9;
-  border: 2px dashed #cbd5e0;
+  background: #4EA68D;
+  border: 2px dashed #365073;
   border-radius: 12px;
   text-align: center;
   font-size: 1rem;
   color: #4a5568;
   transition: all 0.3s ease;
   font-weight: 500;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .file-input-label:hover .file-input-text {
-  border-color: #4ECBD9;
-  background: #9ee1e8;
-  color: #4ECBD9;
+  border-color: #F2C744;
+  background: #4EA68D;
+  color: #F2C744;
 }
 
 .preview-container {
@@ -93,20 +94,22 @@ body {
   width: 100%;
   margin-top: 1.5rem;
   padding: 1rem 2rem;
-  background:  #590505 100%;
-  color: white;
+  background:  #4EA68D 100%;
+  color: #365073;
   border: none;
   border-radius: 12px;
   font-size: 1.1rem;
-  font-weight: 600;
+  font-weight: 200;
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  box-shadow: 0 4px 12px rgba(191, 44, 31, 0.4);
+  /* box-shadow: 0 4px 12px #F2C744; */
+  letter-spacing: 3px;
 }
 
-.scan-button:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(191, 44, 31, 0.5);
+.scan-button:hover  {
+  border-color: #F2C744;
+  background: #4EA68D;
+  color: #F2C744
 }
 
 .scan-button:disabled {
@@ -137,7 +140,7 @@ body {
 .result-card {
   margin: 2rem;
   padding: 2rem;
-  background:  #e9ecef 100%;
+  background: #4EA68D 100%;
   border-radius: 12px;
   animation: slideIn 0.5s ease;
 }
@@ -156,7 +159,7 @@ body {
 .result-title {
   font-size: 1.75rem;
   font-weight: 700;
-  color: #2d3748;
+  color: #365073;
   margin-bottom: 1.5rem;
   text-align: center;
 }
@@ -176,7 +179,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  transition: transform 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .info-item:hover {
@@ -190,6 +193,7 @@ body {
   letter-spacing: 0.5px;
   color: #718096;
   font-weight: 600;
+  transition: transform 0.2s ease;
 }
 
 .info-value {
@@ -201,7 +205,7 @@ body {
 .type-badge {
   display: inline-block;
   padding: 0.25rem 0.75rem;
-  background: #4ECBD9 ;
+  background:#4ECBD9 100%;
   color: white;
   border-radius: 20px;
   font-size: 0.9rem;
