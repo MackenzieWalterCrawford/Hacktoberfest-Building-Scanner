@@ -10,6 +10,19 @@ const port = process.env.PORT || 4000;
 
 app.use(cors());
 app.use(express.json());
+
+// Root route
+app.get('/', (req, res) => {
+  res.json({
+    message: 'Building Scanner API',
+    status: 'running',
+    endpoints: {
+      scan: 'POST /api/scan - Upload a photo to scan building info',
+      exif: 'POST /exif/exif-parsed - Parse EXIF data from photo'
+    }
+  });
+});
+
 // Simple favicon route to avoid 404/error pages returning restrictive headers
 app.get('/favicon.ico', (req, res) => {
   const svg = `<?xml version="1.0" encoding="UTF-8"?>
