@@ -25,6 +25,7 @@ export default function App() {
 
       // Try to parse JSON; if parsing fails, fall back to raw text so we can debug
       const text = await res.text()
+      post(text)
       try {
         const data = JSON.parse(text)
         setResult(data)
