@@ -1,43 +1,117 @@
-# Building Scanner
+# 🏢 Building Scanner
 
-This project is a minimal React + Express app that accepts a photo, extracts GPS EXIF from the image, and queries the OpenAI API to return information about the building at those coordinates.
+A full-stack web application that analyzes building photos using GPS EXIF data and AI. Upload an image with location metadata, and the app will extract the coordinates and provide detailed information about the building at that location using OpenAI's API.
 
-Structure:
-- `server/` - Express backend. POST /api/scan expects form field `photo`.
-- `client/` - React frontend (Vite) with a file upload and preview.
+**🌐 Live Demo:** https://hacktoberfest-building-scanner-frontend.onrender.com/
 
-Setup
-1. Server
-   - cd server
-   - Copy `.env.example` to `.env` and set `OPENAI_API_KEY`.
-   - npm install
-   - npm run dev
+## ✨ Features
 
-2. Client
-   - cd client
-   - npm install
-   - npm run dev
+- 📸 Image upload with drag-and-drop support
+- 🗺️ Automatic GPS EXIF data extraction from photos
+- 🤖 AI-powered building analysis using OpenAI
+- ⚡ Fast and responsive React frontend
+- 🔒 Secure Express backend API
 
-- Notes
-- This prototype sends coordinates to the OpenAI Chat API and asks for a JSON object. Train/validate the prompt for your needs and consider adding caching and rate limiting for production.
-- EXIF GPS data may be missing if the image had location stripped.
+## 🏗️ Project Structure
 
-PowerShell quick start (Windows)
+```
+├── server/          # Express backend API
+│   ├── server.js    # Main server file with /api/scan endpoint
+│   └── .env         # Environment variables (OPENAI_API_KEY)
+└── client/          # React frontend (Vite)
+    └── src/         # React components and assets
+```
 
-Open two PowerShell windows/tabs.
+## 🚀 Getting Started
 
-Server:
+### Prerequisites
+
+- Node.js (v14 or higher)
+- npm or yarn
+- OpenAI API key ([Get one here](https://platform.openai.com/api-keys))
+
+### Installation
+
+#### 1. Server Setup
+
+```bash
+cd server
+cp .env.example .env
+# Edit .env and add your OPENAI_API_KEY
+npm install
+npm run dev
+```
+
+The server will start on `http://localhost:3001`
+
+#### 2. Client Setup
+
+```bash
+cd client
+npm install
+npm run dev
+```
+
+The client will start on `http://localhost:5173`
+
+### Windows PowerShell Quick Start
+
+Open two PowerShell terminals:
+
+**Terminal 1 - Server:**
 ```powershell
 cd .\server
 copy .env.example .env
-# edit .env and set OPENAI_API_KEY
+# Edit .env and set OPENAI_API_KEY
 npm install; npm run dev
 ```
 
-Client:
+**Terminal 2 - Client:**
 ```powershell
 cd .\client
 npm install; npm run dev
 ```
 
-License: MIT
+## 📡 API Endpoints
+
+### `POST /api/scan`
+
+Accepts a photo with GPS EXIF data and returns building information.
+
+**Request:**
+- Method: `POST`
+- Content-Type: `multipart/form-data`
+- Body: Form field `photo` with image file
+
+**Response:**
+```json
+{
+  "coordinates": { "lat": 40.7128, "lon": -74.0060 },
+  "buildingInfo": { ... }
+}
+```
+
+## ⚠️ Important Notes
+
+- **EXIF Data Required:** Images must contain GPS EXIF metadata. Photos that have had location data stripped will not work.
+- **Production Considerations:** This is a prototype. For production use, consider implementing:
+  - Rate limiting
+  - Response caching
+  - Input validation and sanitization
+  - Error handling and logging
+  - API key rotation and security measures
+
+## 🛠️ Technologies Used
+
+- **Frontend:** React, Vite
+- **Backend:** Express.js, Node.js
+- **AI:** OpenAI API
+- **Image Processing:** EXIF data extraction
+
+## 📝 License
+
+MIT
+
+---
+
+Built for Hacktoberfest 🎃
