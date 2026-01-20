@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-const API_URL = 'VITE_API_URL=https://hacktoberfest-building-scanner.onrender.com' || 'http://localhost:4000';
+const API_URL = 'https://hacktoberfest-building-scanner.onrender.com' || 'http://localhost:4000';
 
 export default function App() {
   const [file, setFile] = useState(null)
@@ -25,7 +25,6 @@ export default function App() {
 
       // Try to parse JSON; if parsing fails, fall back to raw text so we can debug
       const text = await res.text()
-      post(text)
       try {
         const data = JSON.parse(text)
         setResult(data)
