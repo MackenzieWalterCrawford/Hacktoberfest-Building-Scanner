@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000';
 
 export default function App() {
   const [file, setFile] = useState(null)
@@ -20,7 +21,7 @@ export default function App() {
     const form = new FormData()
     form.append('photo', file)
     try {
-      const res = await fetch('http://localhost:4000/api/scan', { method: 'POST', body: form })
+      const res = await fetch(`${API_URL}/api/scan`, { method: 'POST', body: form })
 
       // Try to parse JSON; if parsing fails, fall back to raw text so we can debug
       const text = await res.text()
