@@ -134,7 +134,7 @@ router.post('/scan', (req, res) => {
       const mimeType = 'image/jpeg';
 
       // Choose model (env override or sensible default)
-      const model = process.env.ANTHROPIC_MODEL || 'claude-3-7-sonnet-20250219';
+      const model = process.env.ANTHROPIC_MODEL || 'claude-sonnet-4-6';
 
       try {
 
