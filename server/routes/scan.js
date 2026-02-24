@@ -161,9 +161,10 @@ router.post('/scan', (req, res) => {
           }],
         });
 
-        const text = (response.content?.[0]?.text || '').replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '').trim();
+        const text = response.content?.[0]?.text || '';
+        const jsonMatch = text.match(/\{[\s\S]*\}/);
         let parsed;
-        try { parsed = JSON.parse(text); } catch (e) { parsed = { raw: text }; }
+        try { parsed = JSON.parse(jsonMatch ? jsonMatch[0] : text); } catch (e) { parsed = { raw: text }; }
 
         return res.json( parsed );
       } catch (e) {
