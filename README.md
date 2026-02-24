@@ -1,6 +1,5 @@
 # 🏢 Building Scanner
 <img width="948" height="1079" alt="image" src="https://github.com/user-attachments/assets/b66b69f5-2352-4c00-8bf5-edf7a1f5137a" />
-<img width="948" height="1079" alt="image" src="https://github.com/user-attachments/assets/b66b69f5-2352-4c00-8bf5-edf7a1f5137a" />
 
 
 A full-stack web application that analyzes building photos using GPS EXIF data and AI. Upload an image with location metadata, and the app will extract the coordinates and provide detailed information about the building at that location using OpenAI's API.
@@ -118,4 +117,5 @@ MIT
 ---
 
 Built for Hacktoberfest 🎃
+
 
