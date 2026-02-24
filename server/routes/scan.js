@@ -127,6 +127,7 @@ router.post('/scan', (req, res) => {
         .jpeg({ quality: 85 }) // Convert to JPEG with good quality
         .toBuffer();
 
+      console.log('sharp output size (bytes):', compressedBuffer.length);
       // Convert compressed image to base64
       const base64Image = compressedBuffer.toString('base64');
 
